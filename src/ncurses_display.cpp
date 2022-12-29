@@ -3,6 +3,7 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <bits/stdc++.h>
 
 #include "format.h"
 #include "ncurses_display.h"
@@ -69,6 +70,8 @@ void NCursesDisplay::DisplayProcesses(std::vector<Process>& processes,
   mvwprintw(window, row, time_column, "TIME+");
   mvwprintw(window, row, command_column, "COMMAND");
   wattroff(window, COLOR_PAIR(2));
+  std::sort(processes.begin(), processes.end());
+  std::reverse(processes.begin(), processes.end());
   int const num_processes = int(processes.size()) > n ? n : processes.size();
   for (int i = 0; i < num_processes; ++i) {
     mvwprintw(window, ++row, pid_column, to_string(processes[i].Pid()).c_str());

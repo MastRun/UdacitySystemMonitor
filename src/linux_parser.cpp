@@ -173,7 +173,7 @@ string LinuxParser::Command(int pid[[maybe_unused]]) {
 // TODO: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Ram(int pid) { 
-  string returnvalue{};
+  string returnvalue = {""};
   returnvalue = ParserHelper(kProcDirectory + "/" + to_string(pid) + kStatusFilename, "VmSize:", returnvalue);
   return returnvalue; 
 }
@@ -191,7 +191,7 @@ string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid[[maybe_unused]]) { 
+long LinuxParser::UpTime(int pid) { 
   string key, value, line = {};
   vector<std::string> results = {};
   std::ifstream stream(kProcDirectory + kStatFilename);
@@ -206,23 +206,35 @@ long LinuxParser::UpTime(int pid[[maybe_unused]]) {
     
   } 
   }
-  return stol(results[21]); 
+  if(results.size() == 0) {return 0;}
+  if(results[21] == "") {return 0;
+  }
+  return atol(results[21].c_str()); 
 }
 
-std::vector<std::string> LinuxParser::CPU_Stuff(int pid[[maybe_unused]]) { 
+std::vector<std::string> LinuxParser::CPU_Stuff(int pid) { 
   string key, value, line = {};
   vector<std::string> results = {};
-  std::ifstream stream(kProcDirectory + kStatFilename);
+  std::ifstream stream(kProcDirectory + "/" + to_string(pid) + kStatFilename);
   if(stream.is_open()) {
-    while(std::getline(stream, line)) {;
+    std::getline(stream, line);
     std::istringstream linestream(line);
-    linestream >> key;
-
       while(linestream >> value) {
         results.push_back(value);
       }     
-    
-  } 
   }
   return results; 
+}
+
+float LinuxParser::ProcessCpuUtilization(int pid) { 
+    std::vector<std::string> results{};
+    results = CPU_Stuff(pid);
+    if(results.size() == 0) {return 0.0;}
+    if(results[13] == "" || results[14] == "" || results[21] == "" || results[15] == "" || results[16] == "") {return 0.0;}
+    float systemUpTime = 1.0 * LinuxParser::UpTime();
+    long total_time = atol(results[13].c_str()) + atol(results[14].c_str()) + atol(results[15].c_str()) + atol(results[16].c_str());
+    float seconds = systemUpTime - (atol(results[21].c_str())/sysconf(_SC_CLK_TCK));
+    if(seconds == 0) {return 0.0;}
+    float cpuUsage = (total_time / sysconf(_SC_CLK_TCK)) / seconds;
+    return cpuUsage; 
 }

@@ -53,6 +53,7 @@ std::string Uid(int pid);
 std::string User(int pid);
 long int UpTime(int pid);
 std::vector<std::string> CPU_Stuff(int pid);
+float ProcessCpuUtilization(int pid);
 };  // namespace LinuxParser
 
 #endif

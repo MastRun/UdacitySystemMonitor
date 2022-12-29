@@ -17,11 +17,14 @@ class Process {
   bool operator<(Process const& a) const;  // TODO: See src/process.cpp
 
   Process(int pid);
+  float cpuUsage_ = {0.0};
+  std::string command_ = {""};
+  //std::string ram_ = {""};
 
   // TODO: Declare any necessary private members
  private:
     int pid = {0};
-    float cpuUsage_ = {0.0};
+    
 };
 
 #endif

@@ -19,9 +19,13 @@ Processor& System::Cpu() { return cpu_; }
 
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() { 
+    processes_.clear();
     vector <int> pids = LinuxParser::Pids();
     for(int pid :  pids) {
         Process proc(pid);
+        proc.cpuUsage_ = LinuxParser::ProcessCpuUtilization(pid);
+        proc.command_ = LinuxParser::Command(pid);
+        //proc.ram_ = std::to_string(stoi(LinuxParser::Ram(pid)) / 1024);
         processes_.push_back(proc);
     }
     return processes_; }
