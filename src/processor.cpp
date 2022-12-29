@@ -8,17 +8,17 @@
 float Processor::Utilization() { 
     std::vector<std::string> cpu_values = LinuxParser::CpuUtilization();
 
-    int prevIdle = previdle + previowait;
-    int idle = stoi(cpu_values[3]) + stoi(cpu_values[4]);
+    float prevIdle = previdle + previowait;
+    float idle = stoi(cpu_values[3]) + stoi(cpu_values[4]);
 
-    int prevNonIdle = prevuser + prevnice + prevsystem + previrq + prevsoftirq + prevsteal;
-    int nonIdle = stoi(cpu_values[0]) + stoi(cpu_values[1]) + stoi(cpu_values[2]) + stoi(cpu_values[5]) + stoi(cpu_values[6]) + stoi(cpu_values[7]);
+    float prevNonIdle = prevuser + prevnice + prevsystem + previrq + prevsoftirq + prevsteal;
+    float nonIdle = stoi(cpu_values[0]) + stoi(cpu_values[1]) + stoi(cpu_values[2]) + stoi(cpu_values[5]) + stoi(cpu_values[6]) + stoi(cpu_values[7]);
 
-    int prevTotal = prevIdle + prevNonIdle;
-    int total = idle + nonIdle;
+    float prevTotal = prevIdle + prevNonIdle;
+    float total = idle + nonIdle;
 
-    int totald = total - prevTotal;
-    int idled = idle - prevIdle;
+    float totald = total - prevTotal;
+    float idled = idle - prevIdle;
 
     float returnvalue = (1.0 * (totald - idled)) / (1.0 * totald);
 
