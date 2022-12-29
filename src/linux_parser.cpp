@@ -175,7 +175,10 @@ string LinuxParser::Command(int pid[[maybe_unused]]) {
 string LinuxParser::Ram(int pid) { 
   string returnvalue = {""};
   returnvalue = ParserHelper(kProcDirectory + "/" + to_string(pid) + kStatusFilename, "VmSize:", returnvalue);
-  return returnvalue; 
+  if(returnvalue == "") {
+    return string();
+  } 
+  return to_string(stoi(returnvalue) / 1024);
 }
 
 // TODO: Read and return the user ID associated with a process

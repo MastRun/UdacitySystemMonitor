@@ -29,9 +29,10 @@ return command_;
 }
 
 string Process::Ram() { 
-    string ram = LinuxParser::Ram(pid);
-    if(ram == "") {return string();}
-    return to_string(stoi(ram) / 1024); 
+    //string ram = LinuxParser::Ram(pid);
+    //if(ram == "") {return string();}
+    //return to_string(stoi(ram) / 1024); 
+    return ram_;
 }
 
 // TODO: Return the user (name) that generated this process

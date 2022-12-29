@@ -19,7 +19,7 @@ class Process {
   Process(int pid);
   float cpuUsage_ = {0.0};
   std::string command_ = {""};
-  //std::string ram_ = {""};
+  std::string ram_ = {""};
 
   // TODO: Declare any necessary private members
  private:
