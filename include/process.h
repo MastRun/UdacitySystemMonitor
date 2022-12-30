@@ -20,6 +20,8 @@ class Process {
   float cpuUsage_ = {0.0};
   std::string command_ = {""};
   std::string ram_ = {""};
+  std::string uid_ = {""};
+  std::string user_ = {""};
 
   // TODO: Declare any necessary private members
  private:

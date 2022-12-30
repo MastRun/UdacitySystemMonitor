@@ -188,9 +188,32 @@ string LinuxParser::Uid(int pid[[maybe_unused]]) {
   return ParserHelper(kProcDirectory + "/" + to_string(pid) + kStatusFilename, "Uid:", returnvalue);
 }
 
+string Get_Substring(string line, string start_match, string end_match) {
+  int start_idx, end_idx;
+  start_idx = line.find(start_match);
+  end_idx = line.find(end_match, start_idx + start_match.length());
+  if(start_idx == 0 || end_idx == 0) {
+    return string();
+  }
+  string substring = line.substr(start_idx + start_match.length(), end_idx - (start_idx + start_match.length()));
+  return substring;
+}
+
 // TODO: Read and return the user associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::User(string searched_uid) { 
+  string line, key;
+  std::ifstream stream(kPasswordPath);
+  if(stream.is_open()) {
+    while(std::getline(stream, line)) {
+      string user = Get_Substring(line, "\n", ":x:");
+      string uid = Get_Substring(line, ":x:", ":");
+      if (uid == searched_uid) {
+        return user;
+      }
+    }
+  }
+  return string(); }
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function

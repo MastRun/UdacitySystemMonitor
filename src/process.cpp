@@ -37,15 +37,7 @@ string Process::Ram() {
 
 // TODO: Return the user (name) that generated this process
 string Process::User() { 
-    string user = "Else";
-    int uid = stoi(LinuxParser::Uid(pid));
-    if (uid == 0) {
-        user = "root";
-    }
-    if (uid == 1000) {
-        user = "malteub";
-    }
-    return user; 
+    return user_; 
 }
 
 // TODO: Return the age of this process (in seconds)
