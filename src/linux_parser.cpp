@@ -220,17 +220,13 @@ string LinuxParser::User(string searched_uid) {
 long LinuxParser::UpTime(int pid) { 
   string key, value, line = {};
   vector<std::string> results = {};
-  std::ifstream stream(kProcDirectory + kStatFilename);
+  std::ifstream stream(kProcDirectory + "/" + to_string(pid) + kStatFilename);
   if(stream.is_open()) {
-    while(std::getline(stream, line)) {;
-    std::istringstream linestream(line);
-    linestream >> key;
-
-      while(linestream >> value) {
-        results.push_back(value);
-      }     
-    
-  } 
+  std::getline(stream, line);
+  std::istringstream linestream(line);
+    while(linestream >> value) {
+      results.push_back(value);
+    }     
   }
   if(results.size() == 0) {return 0;}
   if(results[21] == "") {return 0;
